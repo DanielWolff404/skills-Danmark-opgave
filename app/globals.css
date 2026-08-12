@@ -8,7 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-poppins);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -22,5 +22,152 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.api-panel {
+  border: 1px solid rgb(15 23 42 / 0.1);
+  border-radius: 1.5rem;
+  background: rgb(255 255 255 / 0.82);
+  box-shadow: 0 20px 50px -35px rgb(2 6 23 / 0.5);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.api-form-panel {
+  padding: 2rem;
+}
+
+.api-panel :where(h1, h2, h3, h4, h5, h6, p, label, span, div) {
+  color: #1f2937;
+}
+
+.api-panel .api-button {
+  color: #fff;
+}
+
+.competition-board {
+  border-color: rgb(255 255 255 / 0.12);
+  background: #111827;
+}
+
+.competition-board :where(h1, h2, h3, h4, h5, h6, p, label, span, div) {
+  color: #fff;
+}
+
+.competition-board .api-panel-header,
+.competition-board .api-panel-body {
+  border-color: rgb(255 255 255 / 0.12);
+  background: #111827;
+}
+
+.competition-board .api-card {
+  border-color: rgb(255 255 255 / 0.12);
+  background: #1f2937;
+}
+
+.competition-board .text-cyan-100 {
+  color: #cffafe;
+}
+
+.api-panel-header {
+  border-bottom: 1px solid rgb(15 23 42 / 0.1);
+  background: rgb(255 255 255 / 0.65);
+  padding: 1.25rem 1.5rem;
+}
+
+.api-panel-header > * {
+  min-width: 0;
+}
+
+.api-panel-body {
+  padding: 1.5rem;
+}
+
+.api-card {
+  border: 1px solid rgb(15 23 42 / 0.1);
+  border-radius: 1rem;
+  background: #f8f5ee;
+  padding: 1.25rem;
+}
+
+.api-label {
+  color: #1f2937;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.api-input {
+  width: 100%;
+  margin-top: 0.5rem;
+  border: 1px solid rgb(15 23 42 / 0.2);
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #1f2937;
+  padding: 0.65rem 0.8rem;
+  outline: none;
+}
+
+.api-input:focus {
+  border-color: #115e59;
+  box-shadow: 0 0 0 3px rgb(13 148 136 / 0.15);
+}
+
+.api-button {
+  border-radius: 999px;
+  background: #0f172a;
+  color: #fff;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+
+.api-button:hover {
+  background: #115e59;
+  transform: translateY(-1px);
+}
+
+.api-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.api-pill {
+  display: inline-flex;
+  border: 1px solid rgb(17 94 89 / 0.25);
+  border-radius: 999px;
+  background: rgb(17 94 89 / 0.1);
+  color: #115e59;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .api-form-panel {
+    padding: 1.25rem;
+  }
+
+  .api-panel-header,
+  .api-panel-body {
+    padding: 1.25rem;
+  }
+
+  .api-button {
+    width: 100%;
+  }
 }
