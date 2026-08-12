@@ -30,10 +30,10 @@ export async function fetchJson<T>(url: string, options?: RequestInit): Promise<
 export function useApiQuery<TData, TError = Error>(
   options: UseQueryOptions<TData, TError>,
 ) {
-  return useQuery({
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+  return useQuery<TData, TError>({
     ...options,
+    staleTime: options.staleTime ?? 5 * 60 * 1000,
+    gcTime: options.gcTime ?? 10 * 60 * 1000,
   });
 }
 
@@ -41,7 +41,7 @@ export function useApiMutation<TData, TVariables, TError = Error>(
   mutationFn: MutationFunction<TData, TVariables>,
   options?: Omit<UseMutationOptions<TData, TError, TVariables>, 'mutationFn'>,
 ) {
-  return useMutation({
+  return useMutation<TData, TError, TVariables>({
     mutationFn,
     ...options,
   });
