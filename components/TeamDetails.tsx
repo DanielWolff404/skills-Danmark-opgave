@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useTeamResults, useTeamsByClass } from '@/hooks/useCompetitionApi';
+import { useClassResults, useTeamResults, useTeamsByClass } from '@/hooks/useCompetitionApi';
 
 type ApiTeam = {
   id?: string | number;
@@ -30,6 +30,11 @@ type ApiClassTeam = {
   team_number?: number;
 };
 
+type ApiClassResult = ApiStationResult & {
+  team_id?: number;
+  team_number?: number;
+};
+
 type TeamItem = {
   id: string | number;
   name: string;
@@ -45,6 +50,12 @@ type StationItem = {
   seconds?: number | null;
 };
 
+type ClassResultTeam = {
+  teamId: number;
+  teamNumber?: number;
+  stations: StationItem[];
+};
+
 type ClassTeamItem = {
   teamId: number;
   classId?: number;
@@ -58,6 +69,7 @@ type TeamDetailsResponse = {
   team: TeamItem | null;
   stations: StationItem[];
   classTeams: ClassTeamItem[];
+  classResults: ClassResultTeam[];
 };
 
 type TeamDetailsProps = {
@@ -65,22 +77,51 @@ type TeamDetailsProps = {
   classId?: string | number;
   title?: string;
   embedded?: boolean;
+  showClassResults?: boolean;
 };
 
-export default function TeamDetails({ teamId, classId, title = 'Featured Team', embedded = false }: TeamDetailsProps) {
+export default function TeamDetails({ teamId, classId, title = 'Udvalgt hold', embedded = false, showClassResults = false }: TeamDetailsProps) {
   const queryKey = classId !== undefined ? 'class_id' : 'team_id';
   const queryValue = classId !== undefined ? classId : teamId;
+  const selectedTeamId = classId !== undefined ? teamId : undefined;
 
   // Use the appropriate hook based on the query mode
-  const teamResultsQuery = useTeamResults(teamId ?? '');
+  const teamResultsQuery = useTeamResults(classId === undefined ? teamId ?? '' : '');
+  const classResultsQuery = useClassResults(showClassResults ? classId ?? '' : '');
   const classTeamsQuery = useTeamsByClass(classId ?? '');
 
   // Pick the active query based on mode
-  const activeQuery = classId !== undefined ? classTeamsQuery : teamResultsQuery;
+  const activeQuery = showClassResults ? classResultsQuery : classId !== undefined ? classTeamsQuery : teamResultsQuery;
   const { data, isLoading: loading, error } = activeQuery;
 
   const parsedData = useMemo<TeamDetailsResponse>(() => {
-    if (!data) return { team: null, stations: [], classTeams: [] };
+    if (!data) return { team: null, stations: [], classTeams: [], classResults: [] };
+
+    if (showClassResults && Array.isArray(data)) {
+      const groupedResults = new Map<number, ClassResultTeam>();
+      (data as ApiClassResult[]).forEach((row, index) => {
+        const teamId = row.team_id ?? index;
+        const team = groupedResults.get(teamId) ?? {
+          teamId,
+          teamNumber: row.team_number,
+          stations: [],
+        };
+        team.stations.push({
+          stationId: row.station_id ?? index,
+          stationNumber: row.station_number,
+          stationName: row.station_name ?? 'Unnamed Station',
+          resultId: row.result_id ?? null,
+          seconds: row.seconds ?? null,
+        });
+        groupedResults.set(teamId, team);
+      });
+
+      const matchingClassResults = selectedTeamId === undefined
+        ? Array.from(groupedResults.values())
+        : Array.from(groupedResults.values()).filter((classResult) => String(classResult.teamId) === String(selectedTeamId));
+
+      return { team: null, stations: [], classTeams: [], classResults: matchingClassResults };
+    }
 
     // Station results mode (team_id query)
     if (Array.isArray(data) && data.length > 0 && 'station_id' in data[0]) {
@@ -99,7 +140,7 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
           return left - right;
         });
 
-      return { team: null, stations: normalizedStations, classTeams: [] };
+      return { team: null, stations: normalizedStations, classTeams: [], classResults: [] };
     }
 
     // Class teams mode (class_id query)
@@ -120,7 +161,11 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
           return left - right;
         });
 
-      return { team: null, stations: [], classTeams: normalizedClassTeams };
+      const matchingClassTeams = selectedTeamId === undefined
+        ? normalizedClassTeams
+        : normalizedClassTeams.filter((classTeam) => String(classTeam.teamId) === String(selectedTeamId));
+
+      return { team: null, stations: [], classTeams: matchingClassTeams, classResults: [] };
     }
 
     // Single team object response
@@ -131,7 +176,7 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
         : (data as ApiTeam);
 
     if (!rawTeam || typeof rawTeam !== 'object') {
-      return { team: null, stations: [], classTeams: [] };
+      return { team: null, stations: [], classTeams: [], classResults: [] };
     }
 
     const membersValue = rawTeam.members ?? rawTeam.member_count;
@@ -146,14 +191,16 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
       },
       stations: [],
       classTeams: [],
+      classResults: [],
     };
-  }, [data, queryValue]);
+  }, [data, queryValue, selectedTeamId, showClassResults]);
 
   const team = parsedData.team;
   const stations = parsedData.stations;
   const classTeams = parsedData.classTeams;
-  const hasData = Boolean(team) || stations.length > 0 || classTeams.length > 0;
-  const modeLabel = queryKey === 'class_id' ? 'Class Teams' : 'Team Results';
+  const classResults = parsedData.classResults;
+  const hasData = Boolean(team) || stations.length > 0 || classTeams.length > 0 || classResults.length > 0;
+  const modeLabel = showClassResults ? 'Klasseresultater' : queryKey === 'class_id' ? 'Klassehold' : 'Holdresultater';
 
   return (
     <section className={embedded ? 'pt-8' : 'px-4 pb-12 sm:px-6 lg:px-8'}>
@@ -181,15 +228,15 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
           )}
 
           {error && (
-            <div className="rounded-2xl border border-red-300 dark:border-red-800 bg-red-100/80 dark:bg-red-900/25 p-5">
-              <p className="text-red-800 dark:text-red-200 font-semibold">Unable to load team data</p>
+            <div role="alert" className="rounded-2xl border border-red-900/10 bg-red-50 p-5">
+              <p className="text-red-800 dark:text-red-200 font-semibold">Holddata kunne ikke indlæses</p>
               <p className="text-red-700 dark:text-red-300 text-sm mt-1">{error.message}</p>
             </div>
           )}
 
           {!loading && !error && !hasData && (
             <div className="api-card">
-                <p className="text-black">No team or station data found.</p>
+                <p className="text-black">Ingen hold- eller stationsdata fundet.</p>
             </div>
           )}
 
@@ -202,7 +249,7 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
               {team.members !== undefined && (
                 <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-900/15 bg-white px-3 py-1 text-sm text-black">
                   <span className="font-semibold">{team.members}</span>
-                  <span>members</span>
+                  <span>medlemmer</span>
                 </div>
               )}
             </div>
@@ -210,7 +257,7 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
 
           {!loading && !error && stations.length > 0 && (
             <div>
-              <p className="mb-4 text-sm uppercase tracking-wide text-black">Station Results</p>
+              <p className="mb-4 text-sm uppercase tracking-wide text-black">Stationsresultater</p>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {stations.map((station) => (
                   <div
@@ -223,11 +270,44 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
                     <p className="mt-1 text-black">{station.stationName}</p>
                     <div className="mt-4 flex flex-wrap gap-2">
                       <span className="rounded-full border border-slate-900/15 bg-white px-3 py-1 text-xs text-black">
-                        Result ID: {station.resultId ?? 'Pending'}
+                        Resultat-ID: {station.resultId ?? 'Afventer'}
                       </span>
                       <span className="rounded-full border border-slate-900/15 bg-white px-3 py-1 text-xs text-black">
-                        Time: {station.seconds !== null && station.seconds !== undefined ? `${station.seconds}s` : 'Pending'}
+                        Tid: {station.seconds !== null && station.seconds !== undefined ? `${station.seconds}s` : 'Afventer'}
                       </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!loading && !error && classResults.length > 0 && (
+            <div>
+              <p className="mb-4 text-sm uppercase tracking-wide text-black">Klassens stationsresultater</p>
+              <div className="space-y-6">
+                {classResults.map((classResult) => (
+                  <div key={classResult.teamId}>
+                    <p className="mb-3 text-lg font-semibold text-black">
+                      {classResult.teamNumber !== undefined ? `Hold ${classResult.teamNumber}` : `Hold-ID ${classResult.teamId}`}
+                    </p>
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                      {classResult.stations.map((station) => (
+                        <div key={`${classResult.teamId}-${station.stationId}`} className="api-card">
+                          <p className="text-lg font-semibold text-black">
+                            {station.stationNumber ? `Station ${station.stationNumber}` : `Station ${station.stationId}`}
+                          </p>
+                          <p className="mt-1 text-black">{station.stationName}</p>
+                          <div className="mt-4 flex flex-wrap gap-2">
+                            <span className="rounded-full border border-slate-900/15 bg-white px-3 py-1 text-xs text-black">
+                              Resultat-ID: {station.resultId ?? 'Afventer'}
+                            </span>
+                            <span className="rounded-full border border-slate-900/15 bg-white px-3 py-1 text-xs text-black">
+                              Tid: {station.seconds !== null && station.seconds !== undefined ? `${station.seconds}s` : 'Afventer'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}
@@ -237,7 +317,9 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
 
           {!loading && !error && classTeams.length > 0 && (
             <div>
-              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-black">Class Team List</p>
+              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-black">
+                {selectedTeamId === undefined ? 'Klassehold' : 'Holddetaljer'}
+              </p>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {classTeams.map((classTeam) => (
                   <div
@@ -245,7 +327,7 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
                     className="api-card"
                   >
                     <p className="text-lg font-semibold text-black">
-                      {classTeam.teamNumber !== undefined ? `Team ${classTeam.teamNumber}` : `Team ID ${classTeam.teamId}`}
+                      {classTeam.teamNumber !== undefined ? `Hold ${classTeam.teamNumber}` : `Hold-ID ${classTeam.teamId}`}
                     </p>
                     <p className="mt-2 text-sm text-black">
                       Class: {classTeam.className ?? classTeam.classId ?? 'Unknown'}
@@ -254,7 +336,7 @@ export default function TeamDetails({ teamId, classId, title = 'Featured Team', 
                       School: {classTeam.schoolName ?? classTeam.schoolId ?? 'Unknown'}
                     </p>
                     <p className="mt-3 text-xs text-black">
-                      Team ID: {classTeam.teamId}
+                      Hold-ID: {classTeam.teamId}
                     </p>
                   </div>
                 ))}

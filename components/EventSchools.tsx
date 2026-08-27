@@ -114,18 +114,18 @@ export default function EventSchools({
 
   return (
     <div className={embedded ? 'mt-8 border-t border-gray-300 pt-6 dark:border-gray-700' : ''}>
-      <h4 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">{title}</h4>
+      <h4 className="mb-4 text-2xl font-bold text-white">{title}</h4>
 
       {loading && (
-        <p className="text-gray-700 dark:text-gray-300">Loading schools...</p>
+        <p className="text-black">Indlæser skoler...</p>
       )}
 
       {error && (
-        <p className="text-red-700 dark:text-red-300">Unable to load schools: {error}</p>
+        <p role="alert" className="rounded-xl border border-red-900/10 bg-red-50 p-4 text-red-700">Unable to load schools: {error}</p>
       )}
 
       {!loading && !error && schools.length === 0 && (
-        <p className="text-gray-700 dark:text-gray-300">No schools found for this event.</p>
+        <p className="text-white">Ingen skoler fundet til dette event.</p>
       )}
 
       {!loading && !error && schools.length > 0 && (
@@ -133,17 +133,17 @@ export default function EventSchools({
           {schools.map((school) => (
             <div
               key={school.id}
-              className="p-4 rounded-lg border border-gray-300 dark:border-gray-600 bg-white/70 dark:bg-gray-900/40"
+              className="api-card"
             >
-              <p className="text-lg font-semibold text-gray-900 dark:text-white">{school.name}</p>
+              <p className="text-lg font-semibold text-black">{school.name}</p>
               {school.city && (
-                <p className="text-sm text-gray-700 dark:text-gray-300">City: {school.city}</p>
+                <p className="text-sm text-black">By: {school.city}</p>
               )}
               {school.municipality && (
-                <p className="text-sm text-gray-700 dark:text-gray-300">Municipality: {school.municipality}</p>
+                <p className="text-sm text-black">Kommune: {school.municipality}</p>
               )}
               {school.region && (
-                <p className="text-sm text-gray-700 dark:text-gray-300">Region: {school.region}</p>
+                <p className="text-sm text-black">Region: {school.region}</p>
               )}
             </div>
           ))}

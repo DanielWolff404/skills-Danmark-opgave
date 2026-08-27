@@ -29,36 +29,36 @@ export default function QueryMonitor() {
       <div className="mb-6 flex flex-col gap-4 border-b border-slate-900/10 pb-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-800">TanStack Query</p>
-          <h2 className="mt-2 text-3xl font-semibold text-gray-800">Cache flow</h2>
-          <p className="mt-2 text-gray-700">Watch API queries and mutations as they move through the app.</p>
+          <h2 className="mt-2 text-3xl font-semibold text-gray-800">Cacheforløb</h2>
+          <p className="mt-2 text-gray-700">Følg API-forespørgsler og ændringer, mens de bevæger sig gennem appen.</p>
         </div>
-        <span className="api-pill">Live monitor</span>
+        <span className="api-pill">Liveovervågning</span>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="api-card">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-600">Fetching GETs</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-600">Hentende GET-kald</p>
           <p className="mt-2 text-4xl font-semibold text-gray-800">{fetchingCount}</p>
-          <p className="mt-1 text-sm text-gray-600">Queries loading now</p>
+          <p className="mt-1 text-sm text-gray-600">Forespørgsler indlæses nu</p>
         </div>
         <div className="api-card">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-600">Active mutations</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-600">Aktive ændringer</p>
           <p className="mt-2 text-4xl font-semibold text-gray-800">{mutatingCount}</p>
-          <p className="mt-1 text-sm text-gray-600">POST or PUT in progress</p>
+          <p className="mt-1 text-sm text-gray-600">POST eller PUT i gang</p>
         </div>
         <div className="api-card">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-600">Cached queries</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-600">Cachede forespørgsler</p>
           <p className="mt-2 text-4xl font-semibold text-gray-800">{queries.length}</p>
-          <p className="mt-1 text-sm text-gray-600">Available in memory</p>
+          <p className="mt-1 text-sm text-gray-600">Tilgængelige i hukommelsen</p>
         </div>
       </div>
 
       <div className="mt-6 overflow-hidden rounded-2xl border border-slate-900/10 bg-[#f8f5ee]">
         <div className="border-b border-slate-900/10 px-5 py-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-700">Query cache</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-700">Forespørgselscache</p>
         </div>
         {queries.length === 0 ? (
-          <p className="px-5 py-6 text-sm text-gray-700">No cached queries yet. Open a data tab to populate the cache.</p>
+          <p className="px-5 py-6 text-sm text-gray-700">Ingen cachede forespørgsler endnu. Åbn en datafane for at udfylde cachen.</p>
         ) : (
           <div className="divide-y divide-slate-900/10">
             {queries.map((query) => (

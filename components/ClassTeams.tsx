@@ -24,7 +24,7 @@ type ClassTeamsProps = {
 
 export default function ClassTeams({
   schoolId,
-  title = 'Class Teams by School',
+  title = 'Klassehold efter skole',
 }: ClassTeamsProps) {
   const { data, isLoading: loading, error } = useClassesBySchool(schoolId);
   const classes = useMemo<ClassTeamItem[]>(() => {
@@ -60,18 +60,18 @@ export default function ClassTeams({
 
         <div className="api-panel-body">
           {loading && (
-            <p className="text-gray-800">Loading class teams...</p>
+            <p className="text-gray-800">Indlæser klassehold...</p>
           )}
 
           {error && (
-            <div className="rounded-2xl border border-red-300 dark:border-red-800 bg-red-100/80 dark:bg-red-900/25 p-5">
-              <p className="text-red-800 dark:text-red-200 font-semibold">Unable to load class teams</p>
+            <div role="alert" className="rounded-2xl border border-red-900/10 bg-red-50 p-5">
+              <p className="text-red-800 dark:text-red-200 font-semibold">Klassehold kunne ikke indlæses</p>
               <p className="text-red-700 dark:text-red-300 text-sm mt-1">{error.message}</p>
             </div>
           )}
 
           {!loading && !error && classes.length === 0 && (
-            <p className="text-gray-800">No classes found for this school.</p>
+            <p className="text-gray-800">Ingen klasser fundet på denne skole.</p>
           )}
 
           {!loading && !error && classes.length > 0 && (
@@ -82,11 +82,11 @@ export default function ClassTeams({
                   className="api-card"
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-800">Class</p>
-                    <span className="api-pill">Active</span>
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-800">Klasse</p>
+                      <span className="api-pill">Aktiv</span>
                   </div>
                   <p className="mt-2 text-2xl font-semibold text-gray-800">{classItem.name}</p>
-                  <p className="mt-3 text-gray-800">Teacher: {classItem.teacherName}</p>
+                  <p className="mt-3 text-gray-800">Lærer: {classItem.teacherName}</p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <span className="rounded-full border border-slate-900/15 bg-white px-3 py-1 text-xs text-gray-800">class_id={classItem.classId}</span>
                     <span className="rounded-full border border-slate-900/15 bg-white px-3 py-1 text-xs text-gray-800">school_id={classItem.schoolId}</span>

@@ -10,6 +10,13 @@ type ClassPayload = {
   teacher_name: string;
 };
 
+const initialForm: ClassPayload = {
+  class_id: 1,
+  school_id: 1,
+  name: '',
+  teacher_name: '',
+};
+
 export default function ClassCreateForm() {
   const [form, setForm] = useState<ClassPayload>(initialForm);
   const [message, setMessage] = useState<string | null>(null);
@@ -28,7 +35,7 @@ export default function ClassCreateForm() {
     setMessage(null);
     mutation.mutate(form, {
       onSuccess: () => {
-        setMessage('Class created successfully.');
+        setMessage('Klasse oprettet.');
         setForm(initialForm);
       },
     });
@@ -36,16 +43,17 @@ export default function ClassCreateForm() {
 
   return (
     <section className="api-panel api-form-panel mt-8">
-      <div className="mb-6">
-        <p className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Classes API</p>
-        <h2 className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">Create class</h2>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">Add a class directly to the competition platform.</p>
+      <div className="mb-6 border-b border-slate-900/10 pb-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-800">Classes API</p>
+        <h2 className="mt-2 text-3xl font-semibold text-gray-900 dark:text-white">Opret klasse</h2>
+        <p className="mt-2 text-gray-600 dark:text-gray-400">Tilføj en klasse direkte til konkurrenceplatformen.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <label className="api-label">
           Class ID
           <input
+            aria-label="Class ID"
             type="number"
             min="1"
             required
@@ -58,6 +66,7 @@ export default function ClassCreateForm() {
         <label className="api-label">
           School ID
           <input
+            aria-label="School ID"
             type="number"
             min="1"
             required
@@ -68,8 +77,9 @@ export default function ClassCreateForm() {
         </label>
 
         <label className="api-label">
-          Class name
+          Klassenavn
           <input
+            aria-label="Class name"
             type="text"
             required
             value={form.name}
@@ -78,14 +88,15 @@ export default function ClassCreateForm() {
           />
         </label>
 
-        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          Teacher name
+        <label className="api-label">
+          Lærernavn
           <input
+            aria-label="Teacher name"
             type="text"
             required
             value={form.teacher_name}
             onChange={(event) => updateField('teacher_name', event.target.value)}
-            className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 outline-none focus:border-black dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            className="api-input"
           />
         </label>
 
@@ -93,15 +104,15 @@ export default function ClassCreateForm() {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="api-button"
+            className="api-button w-full sm:w-auto"
           >
-            {mutation.isPending ? 'Creating class...' : 'Create class'}
+            {mutation.isPending ? 'Opretter klasse...' : 'Opret klasse'}
           </button>
         </div>
       </form>
 
-      {message && <p className="mt-4 rounded-lg bg-green-100 p-3 text-sm text-green-800 dark:bg-green-900/30 dark:text-green-200">{message}</p>}
-      {mutation.error && <p className="mt-4 rounded-lg bg-red-100 p-3 text-sm text-red-800 dark:bg-red-900/30 dark:text-red-200">{mutation.error.message}</p>}
+      {message && <p role="status" className="mt-4 rounded-xl border border-emerald-900/10 bg-emerald-50 p-3 text-sm text-emerald-800">{message}</p>}
+      {mutation.error && <p role="alert" className="mt-4 rounded-xl border border-red-900/10 bg-red-50 p-3 text-sm text-red-800">{mutation.error.message}</p>}
     </section>
   );
 }

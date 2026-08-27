@@ -33,7 +33,7 @@ export default function SchoolCreateForm() {
     setMessage(null);
     mutation.mutate(form, {
       onSuccess: () => {
-        setMessage('School created successfully.');
+        setMessage('Skole oprettet.');
         setForm(initialForm);
       },
     });
@@ -41,16 +41,17 @@ export default function SchoolCreateForm() {
 
   return (
     <section className="api-panel api-form-panel mt-8">
-      <div className="mb-6">
-        <p className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Schools API</p>
-        <h2 className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">Create school</h2>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">Connect a school to an event.</p>
+      <div className="mb-6 border-b border-slate-900/10 pb-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-800">Schools API</p>
+        <h2 className="mt-2 text-3xl font-semibold text-gray-900 dark:text-white">Opret skole</h2>
+        <p className="mt-2 text-gray-600 dark:text-gray-400">Knyt en skole til et event.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 md:grid-cols-3">
         <label className="api-label">
           School ID
           <input
+            aria-label="School ID"
             type="number"
             min="1"
             required
@@ -63,6 +64,7 @@ export default function SchoolCreateForm() {
         <label className="api-label">
           Event ID
           <input
+            aria-label="Event ID"
             type="number"
             min="1"
             required
@@ -73,8 +75,9 @@ export default function SchoolCreateForm() {
         </label>
 
         <label className="api-label">
-          School name
+          Skolenavn
           <input
+            aria-label="School name"
             type="text"
             required
             value={form.name}
@@ -87,15 +90,15 @@ export default function SchoolCreateForm() {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="api-button"
+            className="api-button w-full sm:w-auto"
           >
-            {mutation.isPending ? 'Creating school...' : 'Create school'}
+            {mutation.isPending ? 'Opretter skole...' : 'Opret skole'}
           </button>
         </div>
       </form>
 
-      {message && <p className="mt-4 rounded-lg bg-green-100 p-3 text-sm text-green-800 dark:bg-green-900/30 dark:text-green-200">{message}</p>}
-      {mutation.error && <p className="mt-4 rounded-lg bg-red-100 p-3 text-sm text-red-800 dark:bg-red-900/30 dark:text-red-200">{mutation.error.message}</p>}
+      {message && <p role="status" className="mt-4 rounded-xl border border-emerald-900/10 bg-emerald-50 p-3 text-sm text-emerald-800">{message}</p>}
+      {mutation.error && <p role="alert" className="mt-4 rounded-xl border border-red-900/10 bg-red-50 p-3 text-sm text-red-800">{mutation.error.message}</p>}
     </section>
   );
 }

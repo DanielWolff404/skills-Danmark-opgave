@@ -4,35 +4,28 @@ import ClassStations from '@/components/ClassStations';
 
 export default function Skole() {
   return (
-    <div className="min-h-screen" style={{backgroundImage: "url('/background.png')", backgroundSize: 'contain', backgroundPosition: 'center', backgroundAttachment: 'fixed', backgroundRepeat: 'no-repeat'}}>
-      <div className="min-h-screen bg-linear-to-br from-white/90 via-zinc-100/85 to-white/90 dark:from-gray-700/80 dark:via-gray-600/75 dark:to-gray-700/80">
-        {/* Header Section */}
-        <section className="relative overflow-hidden pt-20 pb-14 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto rounded-3xl border border-white/40 bg-white/60 dark:bg-gray-900/40 backdrop-blur-md p-8 sm:p-12 shadow-xl">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-end">
-              <div className="lg:col-span-2">
-                <p className="uppercase tracking-[0.2em] text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">
-                  Skills Competition
+    <div className="min-h-screen" style={{ backgroundImage: "url('/background.png')", backgroundSize: 'contain', backgroundPosition: 'center', backgroundAttachment: 'fixed', backgroundRepeat: 'no-repeat' }}>
+      <div className="min-h-screen bg-linear-to-br from-white/90 via-slate-100/85 to-teal-50/80 dark:from-gray-700/80 dark:via-gray-600/75 dark:to-gray-700/80">
+        <section className="px-4 pb-10 pt-24 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-slate-950 px-6 py-8 text-white shadow-2xl sm:px-10 sm:py-12">
+            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+              <div className="max-w-3xl">
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-teal-300">
+                  Skills-konkurrence
                 </p>
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6 text-gray-900 dark:text-white leading-tight">
-                  Event School
-                  <span className="block text-transparent bg-clip-text bg-linear-to-r from-black to-gray-500 dark:from-white dark:to-gray-300">
-                    Command Center
-                  </span>
-                </h1>
-                <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-200 max-w-3xl">
-                  Follow live Skills events, participating schools, and class station results in one unified view.
+                <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">Læreroversigt</h1>
+                <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+                  Få overblik over events, deltagende skoler og klassernes fremskridt i ét roligt workspace.
                 </p>
               </div>
-
-              <div className="space-y-4">
-                <div className="rounded-2xl bg-black text-white p-5 shadow-lg">
-                  <p className="text-sm uppercase tracking-wide text-gray-200">Focus</p>
-                  <p className="text-xl font-semibold mt-1">Live Event Tracking</p>
+              <div className="grid grid-cols-2 gap-3 sm:max-w-xs">
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-4">
+                  <p className="text-xs uppercase tracking-wide text-slate-300">Workspace</p>
+                  <p className="mt-2 text-lg font-semibold">Lærervisning</p>
                 </div>
-                <div className="rounded-2xl border border-gray-300 dark:border-gray-700 bg-white/90 dark:bg-gray-800/90 p-5">
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Coverage</p>
-                  <p className="text-xl font-semibold text-gray-900 dark:text-white mt-1">Schools + Events + Results</p>
+                <div className="rounded-2xl border border-teal-300/30 bg-teal-400/15 p-4">
+                  <p className="text-xs uppercase tracking-wide text-teal-200">Status</p>
+                  <p className="mt-2 text-lg font-semibold">Live data</p>
                 </div>
               </div>
             </div>
@@ -41,16 +34,18 @@ export default function Skole() {
 
         {/* Event Schools Section */}
         <section className="pb-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto p-8 bg-white/92 dark:bg-gray-800/92 backdrop-blur-sm rounded-3xl border border-gray-300 dark:border-gray-700 shadow-xl">
-            <EventSchools eventId={1} title="Participating Schools (Event 1)" embedded={false} />
+          <div className="mx-auto max-w-7xl rounded-3xl border border-slate-700 bg-slate-900 p-6 shadow-xl sm:p-8">
+            <EventSchools eventId={1} title="Deltagende skoler (event 1)" embedded={false} />
           </div>
         </section>
 
         {/* Events Section */}
-        <Events />
+        <section className="border-y border-slate-900/10 bg-white/35">
+          <Events />
+        </section>
 
         {/* Class Competition Section */}
-        <ClassStations classId={1} title="Class 1 Skills Event Board" />
+        <ClassStations classId={1} title="Skills-event for klasse 1" />
       </div>
     </div>
   );

@@ -43,12 +43,12 @@ export default function AdminLogin() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(6,95,70,0.18),transparent_40%),radial-gradient(circle_at_85%_10%,rgba(249,115,22,0.16),transparent_36%)]" />
       <section className="relative w-full max-w-md rounded-3xl border border-slate-900/10 bg-white/85 p-8 shadow-[0_20px_60px_-30px_rgba(2,6,23,0.45)] backdrop-blur sm:p-10">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black">Skoleting admin</p>
-        <h1 className="mt-3 text-4xl font-semibold leading-none text-black" style={{ fontFamily: 'var(--font-title)' }}>Sign in to continue</h1>
-        <p className="mt-4 text-black">Use your administrator credentials to open the control room.</p>
+        <h1 className="mt-3 text-4xl font-semibold leading-none text-black" style={{ fontFamily: 'var(--font-title)' }}>Log ind for at fortsætte</h1>
+        <p className="mt-4 text-black">Brug dine administratoroplysninger for at åbne kontrolrummet.</p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">
           <label className="block text-sm font-semibold text-black">
-            Username
+            Brugernavn
             <input
               type="text"
               autoComplete="username"
@@ -59,7 +59,7 @@ export default function AdminLogin() {
             />
           </label>
           <label className="block text-sm font-semibold text-black">
-            Password
+            Adgangskode
             <input
               type="password"
               autoComplete="current-password"
@@ -70,7 +70,7 @@ export default function AdminLogin() {
             />
           </label>
           <button type="submit" disabled={loading} className="w-full rounded-xl bg-slate-900 px-5 py-3 font-semibold text-white transition-colors hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60">
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? 'Logger ind...' : 'Log ind'}
           </button>
         </form>
 

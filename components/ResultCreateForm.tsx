@@ -33,7 +33,7 @@ export default function ResultCreateForm() {
         const savedMessage =
           typeof responseBody === 'object' && responseBody !== null && 'message' in responseBody
             ? String(responseBody.message)
-            : 'Result saved.';
+            : 'Resultat gemt.';
         setMessage(savedMessage);
         setForm(initialForm);
       },
@@ -42,16 +42,17 @@ export default function ResultCreateForm() {
 
   return (
     <section className="api-panel api-form-panel mt-8">
-      <div className="mb-6">
-        <p className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Results API</p>
-        <h2 className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">Save result</h2>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">Record a team&apos;s time for a station.</p>
+      <div className="mb-6 border-b border-slate-900/10 pb-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-800">Results API</p>
+        <h2 className="mt-2 text-3xl font-semibold text-gray-900 dark:text-white">Gem resultat</h2>
+        <p className="mt-2 text-gray-600 dark:text-gray-400">Registrér et holds tid på en station.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 md:grid-cols-3">
         <label className="api-label">
           Team ID
           <input
+            aria-label="Team ID"
             type="number"
             min="1"
             required
@@ -64,6 +65,7 @@ export default function ResultCreateForm() {
         <label className="api-label">
           Station ID
           <input
+            aria-label="Station ID"
             type="number"
             min="1"
             required
@@ -74,8 +76,9 @@ export default function ResultCreateForm() {
         </label>
 
         <label className="api-label">
-          Seconds
+          Sekunder
           <input
+            aria-label="Seconds"
             type="number"
             min="0"
             required
@@ -89,15 +92,15 @@ export default function ResultCreateForm() {
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="api-button"
+            className="api-button w-full sm:w-auto"
           >
-            {mutation.isPending ? 'Saving result...' : 'Save result'}
+            {mutation.isPending ? 'Gemmer resultat...' : 'Gem resultat'}
           </button>
         </div>
       </form>
 
-      {message && <p className="mt-4 rounded-lg bg-green-100 p-3 text-sm text-green-800 dark:bg-green-900/30 dark:text-green-200">{message}</p>}
-      {mutation.error && <p className="mt-4 rounded-lg bg-red-100 p-3 text-sm text-red-800 dark:bg-red-900/30 dark:text-red-200">{mutation.error.message}</p>}
+      {message && <p role="status" className="mt-4 rounded-xl border border-emerald-900/10 bg-emerald-50 p-3 text-sm text-emerald-800">{message}</p>}
+      {mutation.error && <p role="alert" className="mt-4 rounded-xl border border-red-900/10 bg-red-50 p-3 text-sm text-red-800">{mutation.error.message}</p>}
     </section>
   );
 }

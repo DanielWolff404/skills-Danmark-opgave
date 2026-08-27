@@ -77,15 +77,15 @@ export default function EventUpdateForm({
           <button
             type="submit"
             disabled={mutation.isPending}
-            className="api-button"
+            className="api-button w-full sm:w-auto"
           >
             {mutation.isPending ? 'Updating event...' : 'Update event'}
           </button>
         </div>
       </form>
 
-      {message && <p className="mt-4 rounded-lg bg-green-100 p-3 text-sm text-green-800 dark:bg-green-900/30 dark:text-green-200">{message}</p>}
-      {mutation.error && <p className="mt-4 rounded-lg bg-red-100 p-3 text-sm text-red-800 dark:bg-red-900/30 dark:text-red-200">{mutation.error.message}</p>}
+      {message && <p role="status" className="mt-4 rounded-xl border border-emerald-900/10 bg-emerald-50 p-3 text-sm text-emerald-800">{message}</p>}
+      {mutation.error && <p role="alert" className="mt-4 rounded-xl border border-red-900/10 bg-red-50 p-3 text-sm text-red-800">{mutation.error.message}</p>}
     </section>
   );
 }

@@ -29,7 +29,7 @@ type EventItem = {
 
 const normalizeEvent = (event: ApiEvent, fallbackId: string | number): EventItem => ({
   id: event.id ?? event.event_id ?? fallbackId,
-  title: event.title ?? event.name ?? 'Untitled Event',
+  title: event.title ?? event.name ?? 'Event uden navn',
   date: event.date ?? event.event_date,
   time: event.time,
   location: event.location,
@@ -70,8 +70,8 @@ export default function Events() {
   if (loading) {
     return (
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto rounded-3xl border border-gray-300 dark:border-gray-700 bg-white/92 dark:bg-gray-800/92 p-8">
-          <p className="text-gray-700 dark:text-gray-300 text-lg">Loading events...</p>
+        <div className="api-panel mx-auto max-w-7xl p-8">
+          <p className="text-lg text-gray-700">Indlæser events...</p>
         </div>
       </section>
     );
@@ -80,16 +80,16 @@ export default function Events() {
   if (error) {
     return (
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="p-8 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-800 rounded-xl">
+          <div className="api-panel mx-auto max-w-7xl">
+          <div className="rounded-2xl border border-red-900/10 bg-red-50 p-8">
             <p className="text-red-800 dark:text-red-200 text-lg font-semibold mb-2">
-              Unable to load events
+              Events kunne ikke indlæses
             </p>
             <p className="text-red-700 dark:text-red-300 text-sm">
               {error.message}
             </p>
             <p className="text-red-600 dark:text-red-400 text-xs mt-4">
-              Check browser console for more details. Make sure your API base URL is configured in .env.local
+              Kontrollér, at API-basens URL er konfigureret i .env.local.
             </p>
           </div>
         </div>
@@ -100,8 +100,8 @@ export default function Events() {
   if (events.length === 0) {
     return (
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto rounded-3xl border border-gray-300 dark:border-gray-700 bg-white/92 dark:bg-gray-800/92 p-8 text-center">
-          <p className="text-gray-700 dark:text-gray-300 text-lg">No events available at this time</p>
+        <div className="api-panel mx-auto max-w-7xl p-8 text-center">
+          <p className="text-black text-lg">Ingen events tilgængelige lige nu</p>
         </div>
       </section>
     );
@@ -111,14 +111,14 @@ export default function Events() {
     <section className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="mb-8 text-3xl font-bold text-center text-gray-900 dark:text-white sm:mb-12 sm:text-4xl">
-          Upcoming Events
+          Kommende events
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event, index) => (
             <div
               key={event.id || index}
-              className="group flex min-w-0 flex-col rounded-xl border border-gray-300 bg-white/90 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-black hover:shadow-xl dark:border-gray-700 dark:bg-gray-800/90 sm:p-8"
+              className="group flex min-w-0 flex-col rounded-2xl border border-slate-900/10 bg-white/85 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-teal-800/40 hover:shadow-xl sm:p-7"
             >
               {/* Date Badge */}
               {event.date && (
@@ -128,21 +128,21 @@ export default function Events() {
               )}
               
               {/* Event Title */}
-              <h3 className="mb-2 wrap-break-word text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+              <h3 className="mb-2 wrap-break-word text-xl font-semibold text-black sm:text-2xl">
                 {event.title}
               </h3>
               
               {/* Event Time */}
               {event.time && (
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                  ⏰ {event.time}
+                  Tid: {event.time}
                 </p>
               )}
               
               {/* Event Location */}
               {event.location && (
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  📍 {event.location}
+                  Sted: {event.location}
                 </p>
               )}
               
@@ -164,12 +164,14 @@ export default function Events() {
               
               {/* Select Button */}
               <button
+                type="button"
+                aria-pressed={selectedEventId === event.id}
                 onClick={() => {
                   setSelectedEventId(event.id);
                 }}
-                className="mt-auto w-full rounded-xl bg-black px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+                className="api-button mt-auto w-full"
               >
-                View Schools
+                Se skoler
               </button>
             </div>
           ))}
@@ -177,22 +179,34 @@ export default function Events() {
 
         {selectedEvent && (
           <div className="mt-8 rounded-xl border border-gray-300 bg-white/90 p-5 shadow-sm backdrop-blur-sm dark:border-gray-700 dark:bg-gray-800/90 sm:p-8">
-            <p className="text-sm uppercase tracking-wide text-gray-600 dark:text-gray-400 mb-2">
-              Selected Event
-            </p>
-            <h3 className="mb-4 wrap-break-word text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-              {selectedEvent.title}
-            </h3>
+            <div className="mb-5 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-sm uppercase tracking-wide text-gray-600 dark:text-gray-400">
+                  Valgt event
+                </p>
+                <h3 className="mt-2 wrap-break-word text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
+                  {selectedEvent.title}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedEventId(null)}
+                className="shrink-0 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-100 hover:text-black dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white"
+                aria-label="Close selected event"
+              >
+                Luk
+              </button>
+            </div>
             {selectedEvent.date && (
               <p className="text-gray-700 dark:text-gray-300 mb-2">
-                Date: {new Date(selectedEvent.date).toLocaleDateString()}
+                  Dato: {new Date(selectedEvent.date).toLocaleDateString()}
               </p>
             )}
             {selectedEvent.time && (
-              <p className="text-gray-700 dark:text-gray-300 mb-2">Time: {selectedEvent.time}</p>
+              <p className="text-gray-700 dark:text-gray-300 mb-2">Tid: {selectedEvent.time}</p>
             )}
             {selectedEvent.location && (
-              <p className="text-gray-700 dark:text-gray-300 mb-2">Location: {selectedEvent.location}</p>
+              <p className="text-gray-700 dark:text-gray-300 mb-2">Sted: {selectedEvent.location}</p>
             )}
             {selectedEvent.description && (
               <p className="text-gray-700 dark:text-gray-300 mt-4">{selectedEvent.description}</p>

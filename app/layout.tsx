@@ -17,13 +17,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Skoleting",
-  description: "Welcome to Skoleting",
+  description: "Skoleting - overblik over skoleevents",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
+      lang="da"
       suppressHydrationWarning
       className={`${poppins.variable} ${geistMono.variable} h-full antialiased`}
     >

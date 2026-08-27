@@ -12,22 +12,31 @@ export default function Stations() {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <div className="min-h-screen bg-linear-to-br from-white/90 via-zinc-100/85 to-white/90 dark:from-gray-700/80 dark:via-gray-600/75 dark:to-gray-700/80">
-        <section className="pt-20 pb-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="rounded-3xl border border-white/40 bg-white/60 dark:bg-gray-900/40 backdrop-blur-md p-8 sm:p-12 shadow-xl">
-              <p className="uppercase tracking-[0.2em] text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">
-                Skills Competition
-              </p>
-              <h1 className="text-4xl sm:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
-                Stations
-                <span className="block text-transparent bg-clip-text bg-linear-to-r from-black to-gray-500 dark:from-white dark:to-gray-300">
-                  Live Overview
-                </span>
-              </h1>
-              <p className="mt-4 text-lg text-gray-700 dark:text-gray-200 max-w-2xl">
-                Live station list pulled directly from the API endpoint.
-              </p>
+      <div className="min-h-screen bg-linear-to-br from-white/90 via-slate-100/85 to-teal-50/80 dark:from-gray-700/80 dark:via-gray-600/75 dark:to-gray-700/80">
+        <section className="px-4 pb-10 pt-24 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-slate-950 px-6 py-8 text-white shadow-2xl sm:px-10 sm:py-12">
+            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+              <div className="max-w-3xl">
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-teal-300">
+                  Skills-konkurrence
+                </p>
+                <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+                  Stationsoversigt
+                </h1>
+                <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+                  Se alle stationer, deres placering og det hold, der deltager lige nu.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3 sm:max-w-xs">
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-4">
+                  <p className="text-xs uppercase tracking-wide text-slate-300">Visning</p>
+                  <p className="mt-2 text-lg font-semibold">Live stationer</p>
+                </div>
+                <div className="rounded-2xl border border-teal-300/30 bg-teal-400/15 p-4">
+                  <p className="text-xs uppercase tracking-wide text-teal-200">Status</p>
+                  <p className="mt-2 text-lg font-semibold">Aktive nu</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
